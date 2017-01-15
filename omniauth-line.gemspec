@@ -6,12 +6,12 @@ require 'omniauth/line/version'
 Gem::Specification.new do |spec|
   spec.name          = "omniauth-line"
   spec.version       = Omniauth::Line::VERSION
-  spec.authors       = ["Shimoyama, Hiroyasu"]
-  spec.email         = ["shimoyama@spicelife.jp"]
+  spec.authors       = ["akichim21"]
+  spec.email         = ["afujiwara2012@gmail.com"]
 
   spec.summary       = %q{LINE web login strategy for OmniAuth.}
   spec.description   = %q{LINE web login strategy for OmniAuth.}
-  spec.homepage      = "https://github.com/hshimoyama/omniauth-line"
+  spec.homepage      = "https://github.com/akichim21/omniauth-line"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency 'omniauth-oauth2', '~> 1.2'
+  spec.add_runtime_dependency 'omniauth-oauth2'
 
 
   spec.add_development_dependency 'rspec'
