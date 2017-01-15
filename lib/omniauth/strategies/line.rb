@@ -6,12 +6,13 @@ module OmniAuth
 
       option :name, 'line'
       option :client_options, {
-               :site => 'https://api.line.me',
-               :authorize_url => 'https://access.line.me/dialog/oauth/weblogin',
+               :site => 'https://access.line.me',
+               :authorize_url => '/dialog/oauth/weblogin',
                :token_url => '/v1/oauth/accessToken'
              }
 
-      def request_phase
+      def callback_phase
+        options[:client_options][:site] = 'https://api.line.me'
         super
       end
 
@@ -41,18 +42,6 @@ module OmniAuth
           prune!(value) if value.is_a?(Hash)
           value.nil? || (value.respond_to?(:empty?) && value.empty?)
         end
-      end
-
-      def build_access_token
-        token_params = {
-          :grant_type    => 'authorization_code',
-          :client_id     => client.id,
-          :client_secret => client.secret,
-          :code          => request.params['code'],
-          :redirect_uri  => callback_url,
-        }
-
-        client.get_token(token_params);
       end
 
       def callback_url
