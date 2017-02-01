@@ -8,7 +8,7 @@ module OmniAuth
       option :client_options, {
                :site => 'https://access.line.me',
                :authorize_url => '/dialog/oauth/weblogin',
-               :token_url => '/v1/oauth/accessToken'
+               :token_url => '/v2/oauth/accessToken'
              }
 
       def callback_phase
@@ -16,7 +16,7 @@ module OmniAuth
         super
       end
 
-      uid { raw_info['mid'] }
+      uid { raw_info['userId'] }
 
       info do
         prune!(
@@ -34,7 +34,7 @@ module OmniAuth
       end
 
       def raw_info
-        @raw_info ||= access_token.get('https://api.line.me/v1/profile').parsed
+        @raw_info ||= access_token.get('https://api.line.me/v2/profile').parsed
       end
 
       def prune!(hash)
