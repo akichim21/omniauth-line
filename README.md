@@ -7,16 +7,12 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'omniauth-line'
+gem 'omniauth-line', github: "akichim21/omniauth-line"
 ```
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install omniauth-line
 
 ## Usage
 
