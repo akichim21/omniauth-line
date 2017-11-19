@@ -1,8 +1,8 @@
-require 'omniauth-oauth'
+require 'omniauth-oauth2'
 
 module OmniAuth
   module Strategies
-    class Line < OmniAuth::Strategies::OAuth
+    class Line < OmniAuth::Strategies::OAuth2
 
       option :name, 'line'
       option :client_options, {
