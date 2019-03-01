@@ -1,16 +1,19 @@
 require 'omniauth-oauth2'
+require 'json'
 
 module OmniAuth
   module Strategies
     class Line < OmniAuth::Strategies::OAuth2
-
       option :name, 'line'
-      option :client_options, {
-               :site => 'https://access.line.me',
-               :authorize_url => '/dialog/oauth/weblogin',
-               :token_url => '/v2/oauth/accessToken'
-             }
+      option :scope, 'profile openid'
 
+      option :client_options, {
+        site: 'https://access.line.me',
+        authorize_url: '/oauth2/v2.1/authorize',
+        token_url: '/oauth2/v2.1/token'
+      }
+
+      # host changed
       def callback_phase
         options[:client_options][:site] = 'https://api.line.me'
         super
@@ -19,33 +22,18 @@ module OmniAuth
       uid { raw_info['userId'] }
 
       info do
-        prune!(
-          { :display_name   => raw_info['displayName'],
-            :picture_url    => raw_info['pictureUrl'],
-            :status_message => raw_info['statusMessage'],
-          }
-        )
+        {
+          name:        raw_info['displayName'],
+          image:       raw_info['pictureUrl'],
+          description: raw_info['statusMessage']
+        }
       end
 
-      extra do
-        hash = {}
-        hash[:raw_info] = raw_info unless skip_info?
-        prune! hash
-      end
-
+      # Require: Access token with PROFILE permission issued.
       def raw_info
-        @raw_info ||= access_token.get('https://api.line.me/v2/profile').parsed
-      end
-
-      def prune!(hash)
-        hash.delete_if do |_, value|
-          prune!(value) if value.is_a?(Hash)
-          value.nil? || (value.respond_to?(:empty?) && value.empty?)
-        end
-      end
-
-      def callback_url
-        full_host + script_name + callback_path
+        @raw_info ||= JSON.load(access_token.get('v2/profile').body)
+      rescue ::Errno::ETIMEDOUT
+        raise ::Timeout::Error
       end
 
     end
